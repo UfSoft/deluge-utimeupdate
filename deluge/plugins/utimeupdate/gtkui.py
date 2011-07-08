@@ -57,15 +57,15 @@ class GtkUI(GtkPluginBase):
         parent = self.prefs.get_parent()
         if parent:
             parent.remove(self.prefs)
-        downloads_vbox = component.get("Preferences").glade.get_widget('vbox1')
-        downloads_vbox.pack_start(self.prefs, False, True, 0)
+        self.downloads_vbox = component.get("Preferences").builder.get_object('downloads_vbox')
+        self.downloads_vbox.pack_start(self.prefs, False, True, 0)
 
         component.get("PluginManager").register_hook("on_apply_prefs", self.on_apply_prefs)
         component.get("PluginManager").register_hook("on_show_prefs", self.on_show_prefs)
 
     def disable(self):
         log.debug("Disabling %s UTimeUpdate Plugin", self.__class__.__name__)
-        # XXX: Remove our prefs box
+        self.downloads_vbox.remove(self.prefs)
         component.get("PluginManager").deregister_hook("on_apply_prefs", self.on_apply_prefs)
         component.get("PluginManager").deregister_hook("on_show_prefs", self.on_show_prefs)
 
